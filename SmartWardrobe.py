@@ -35,14 +35,14 @@ def imageIndex(n):
 
 sys.stdout = open(os.devnull, "w")
 while 1:
-	sys.stdout = sys.__stdout__
+	#sys.stdout = sys.__stdout__
 	command = input("\nEnter command> ");
 	command_list = command.split()
 	sys.stdout = open(os.devnull, "w")
 	if command_list[0] == "train":
 		x_train, y_train = loadlocal_mnist(
-		images_path = "E:/Programming/teststuff/Tensor/train-images-idx3-ubyte",
-		labels_path = "E:/Programming/teststuff/Tensor/train-labels-idx1-ubyte")
+		images_path = "E:/Programming/SmartWardrobe/train-images-idx3-ubyte",
+		labels_path = "E:/Programming/SmartWardrobe/train-labels-idx1-ubyte")
 		
 		x_train = tf.keras.utils.normalize(x_train, axis = 1)
 		
