@@ -35,7 +35,7 @@ def imageIndex(n):
 
 sys.stdout = open(os.devnull, "w")
 while 1:
-	#sys.stdout = sys.__stdout__
+	sys.stdout = sys.__stdout__
 	command = input("\nEnter command> ");
 	command_list = command.split()
 	sys.stdout = open(os.devnull, "w")
