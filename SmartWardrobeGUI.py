@@ -9,6 +9,8 @@ import PIL.ImageOps
 from PIL import Image
 from PIL.ImageQt import ImageQt
 from mlxtend.data import loadlocal_mnist
+import matplotlib
+import matplotlib.pyplot as plt
 
 from win32api import GetSystemMetrics
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QLabel, QComboBox, QTextEdit
@@ -16,12 +18,15 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QThread, pyqtSignal, QPoint
 from PyQt5.QtGui import  QIcon, QCursor, QPixmap, QPainter, QBrush, QPen, QColor
 
+matplotlib.use("TkAgg")
 trainBusy = False
 testBusy = False
 imgFile = ""
 imgPrediction = ""
+epochsCount = 3
 optimizer = "SGD"
 lossFunction = "sparse_categorical_crossentropy"
+accuracyData = []
 
 mainWinWidth = GetSystemMetrics(0)
 mainWinHeight = GetSystemMetrics(1)
@@ -160,9 +165,9 @@ class Window(QMainWindow):
             "kullback_leibler_divergence",
             "poisson",
             "cosine_proximity",
-            "is_categorical_crossentropy"
         ])
-        self.lossFunctionComboBox.setCurrentIndex(0)
+        self.lossFunctionComboBox.setCurrentIndex(10)
+        self.lossFunctionComboBox.currentIndexChanged.connect(self.lossFunctionChanged)
 
         x_pos = 15
         y_pos = 240
@@ -191,6 +196,18 @@ class Window(QMainWindow):
             self._trainThread.start()
     
     def trainComplete(self):
+        global accuracyData
+        plt.figure()
+        plt.style.use("ggplot")
+        plt.ylim(0, 1)
+        x = ["epoch " + str(i + 1) for i in range(len(accuracyData))]
+        x_pos = [i for i, _ in enumerate(x)]
+        colorData = [((255 - (colorMappingFunction(accuracyData[i]) * 102))/255, (51 + (colorMappingFunction(accuracyData[i]) * 204))/255, (colorMappingFunction(accuracyData[i]) * 51)/255) for i in range(len(accuracyData))]
+        plt.bar(x_pos, accuracyData, color = colorData)
+        plt.xlabel("Epoch")
+        plt.ylabel("Accuracy")
+        plt.xticks(x_pos, x)
+        plt.show()
         self.console.append("Training completed")
     
     def testButtonClicked(self):
@@ -329,10 +346,12 @@ def imgIndex(n):
 		return "Unknown"
 
 def trainData():
+    global epochsCount
     global optimizer
     global lossFunction
+    global accuracyData
 
-    sys.stdout = open(os.devnull, 'w')
+    #sys.stdout = open(os.devnull, 'w')
 
     myWin.consoleWrite("Loading training data ...")
     x_train, y_train = loadlocal_mnist(images_path = "train-images-idx3-ubyte", labels_path = "train-labels-idx1-ubyte")
@@ -341,23 +360,24 @@ def trainData():
     myWin.consoleWrite("Adding neural network layers ...")
     model = tf.keras.models.Sequential()
     model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(784, activation=tf.nn.relu))
-    model.add(tf.keras.layers.Dense(196, activation=tf.nn.relu))
-    model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))
+    model.add(tf.keras.layers.Dense(784, activation = tf.nn.relu))
+    model.add(tf.keras.layers.Dense(196, activation = tf.nn.relu))
+    model.add(tf.keras.layers.Dense(10, activation = tf.nn.softmax))
 
     myWin.consoleWrite("Optimizer = " + str(optimizer))
     myWin.consoleWrite("Loss Function = " + str(lossFunction))
-    model.compile(optimizer = optimizer, loss = lossFunction, metrics = ["accuracy"])
+    model.compile(optimizer = optimizer, loss = lossFunction, metrics = ["acc", "mse"])
     
     myWin.consoleWrite("Fitting model ...")
-    history = model.fit(x_train, y_train, epochs = 3)
+    history = model.fit(x_train, y_train, epochs = epochsCount)
+    accuracyData = history.history["acc"]
     for metric in model.metrics_names:
         metricList = history.history[metric]
         myWin.consoleWrite(metric + " = " + str(round(metricList[len(metricList) - 1], 4)))
 
     model.save("smartwardrobe.model")
 
-    sys.stdout = sys.__stdout__
+    #sys.stdout = sys.__stdout__
 
 def testData():
     img = PIL.Image.open(imgFile).convert('L')
@@ -383,6 +403,9 @@ def testData():
     sys.stdout = sys.__stdout__
 
     return imgIndex(np.argmax(predictions[0]))
+
+def colorMappingFunction(x):
+    return 0.5 * ((np.sign(x - 0.5) * (abs(x - 0.5) ** 0.2)) + 1)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
