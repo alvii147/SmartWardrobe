@@ -68,19 +68,19 @@ Enter command> test
 
 5). tshirtwhite.jpg is an image of a COAT
 ```
-<img src="hoodie.jpg" alt="hoodieimg" width="100"/>  
+<img src="img/hoodie.jpg" alt="hoodieimg" width="100"/>  
 hoodie.jpg  
   
-![sandalimg](img/sandal.jpg)
+<img src="img/sandal.jpg" alt="sandalimg" width="100"/>  
 sandal.jpg  
   
-![shoeimg](img/shoe.jpg)
+<img src="img/shoe.jpg" alt="shoeimg" width="100"/>  
 shoe.jpg  
   
-![tshirtimg](img/tshirt.jpg)
+<img src="img/tshirt.jpg" alt="tshirtimg" width="100"/>  
 tshirt.jpg  
   
-![tshirtwhiteimg](img/tshirtwhite.jpg)
+<img src="img/tshirtwhite.jpg" alt="tshirtwhiteimg" width="100"/>  
 tshirtwhite.jpg  
 
 ## GUI Mode
