@@ -68,7 +68,7 @@ Enter command> test
 
 5). tshirtwhite.jpg is an image of a COAT
 ```
-![hoodieimg](img/hoodie.jpg)
+<img src="hoodie.jpg" alt="hoodieimg" width="100"/>  
 hoodie.jpg  
   
 ![sandalimg](img/sandal.jpg)
