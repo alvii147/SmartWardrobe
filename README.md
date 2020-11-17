@@ -69,19 +69,23 @@ Enter command> test
 5). tshirtwhite.jpg is an image of a COAT
 ```
 <img src="img/hoodie.jpg" alt="hoodieimg" width="100"/>  
-hoodie.jpg  
+**hoodie.jpg**  
+  
   
 <img src="img/sandal.jpg" alt="sandalimg" width="100"/>  
-sandal.jpg  
+**sandal.jpg**  
+  
   
 <img src="img/shoe.jpg" alt="shoeimg" width="100"/>  
-shoe.jpg  
+**shoe.jpg**  
+  
   
 <img src="img/tshirt.jpg" alt="tshirtimg" width="100"/>  
-tshirt.jpg  
+**tshirt.jpg**  
+  
   
 <img src="img/tshirtwhite.jpg" alt="tshirtwhiteimg" width="100"/>  
-tshirtwhite.jpg  
+**tshirtwhite.jpg**  
 
 ## GUI Mode
 Built with **PyQt5,** the GUI supports the same functionality as the command line mode and more. In addition to testing images in the img directory, the GUI allows the testing of any other images. The GUI also allows selection of the loss function, the optimizer, and has a built-in terminal and image display.
