@@ -33,12 +33,12 @@ def imageIndex(n):
 	else:
 		return "an unknown object"
 
-sys.stdout = open(os.devnull, "w")
+#sys.stdout = open(os.devnull, "w")
 while 1:
-	sys.stdout = sys.__stdout__
+	#sys.stdout = sys.__stdout__
 	command = input("\nEnter command> ")
 	command_list = command.split()
-	sys.stdout = open(os.devnull, "w")
+	#sys.stdout = open(os.devnull, "w")
 	if command_list[0] == "train":
 		x_train, y_train = loadlocal_mnist(
 		images_path = "E:/Programming/SmartWardrobe/train-images-idx3-ubyte",
@@ -55,7 +55,7 @@ while 1:
 		model.compile(optimizer = "sgd", loss = "sparse_categorical_crossentropy", metrics = ["accuracy"])
 		model.fit(x_train, y_train, epochs = 3)
 		
-		model.save("smartwardrobe.model")
+		model.save("smartwardrobe.model", save_format = "h5")
 	elif command_list[0] == "test":
 		cnt = 0
 		imgArray = []
@@ -76,25 +76,25 @@ while 1:
 		predictions = new_model.predict(imgArray)
 		
 		iter = 0
-		sys.stdout = sys.__stdout__
+		#sys.stdout = sys.__stdout__
 		while iter < cnt:
 			print("\n" + str(iter + 1) + "). " + imgNames[iter] + " is an image of " + imageIndex(np.argmax(predictions[iter])))
 			iter+=1
-		sys.stdout = open(os.devnull, "w")
+		#sys.stdout = open(os.devnull, "w")
 	elif command_list[0] == "display":
-		sys.stdout = sys.__stdout__
+		#sys.stdout = sys.__stdout__
 		if len(command_list) < 2:
 			print("type:    display [FILE NAME]")
 		else:
 			im = Image.open("img/" + command_list[1])
 			im.show()
-		sys.stdout = open(os.devnull, "w")
+		#sys.stdout = open(os.devnull, "w")
 	elif command_list[0] == "exit":
 		exit()
 	else:
-		sys.stdout = sys.__stdout__
+		#sys.stdout = sys.__stdout__
 		print("\nCOMMANDS")
 		print("\ttrain\t\t\ttrain dataset")
 		print("\ttest\t\t\tpredict images in img folder")
 		print("\tdisplay [FILE NAME]\tdisplay image file")
-		sys.stdout = open(os.devnull, "w")
+		#sys.stdout = open(os.devnull, "w")
